@@ -184,4 +184,21 @@ This log captures raw data from unrecognized or unparseable ROC Plus opcodes and
 * See the `ROC_PLUS::roc_plus_unknown_data_log: record` in file `scripts/roc_plus_types.zeek` for a list of the fields logged.
 * This log is used for any opcode that the parser doesn't specifically handle.
 
+## ICSNPP Packages
 
+All ICSNPP Packages:
+
+* [ICSNPP](https://github.com/cisagov/icsnpp)
+
+### Other Software
+Idaho National Laboratory is a national research facility with a focus on development of software and toolchains to improve the security of criticial infrastructure environments around the world. Please review our other software and scientific offerings at:
+
+[Primary Technology Overview Page](https://www.inl.gov/science-technology-overview)
+
+[Supported Open Source Software](https://github.com/idaholab)
+
+[Raw Experiment Open Source Software](https://github.com/IdahoLabResearch)
+
+### License
+
+Copyright 2025 Battelle Energy Alliance, LLC. Released under the terms of the 3-Clause BSD License (see [`LICENSE`](./LICENSE)).
