@@ -3,12 +3,12 @@ module ROC_PLUS_OPCODE_017;
 import spicy;
 import ROC_PLUS_ENUMS;
 import ROC_PLUS_FUNCTIONS;
-import ROC_PLUS_GLOBALS;
+import ROC_PLUS;
 
 type Login = unit(dataLength: uint8) {
     var op17Type : ROC_PLUS_ENUMS::Opcode17Type = ROC_PLUS_FUNCTIONS::determineOpcode17SubType(dataLength);
     
-    switch(ROC_PLUS_GLOBALS::PACKET_TYPE_GLOBAL) {
+    switch(ROC_PLUS::PACKET_TYPE_GLOBAL) {
         ROC_PLUS_ENUMS::PacketType::REQUEST  -> request  : LoginRequest(self.op17Type, dataLength);
         ROC_PLUS_ENUMS::PacketType::RESPONSE -> response : LoginResponse(self.op17Type);
     };
