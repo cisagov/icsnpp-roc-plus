@@ -3,7 +3,7 @@ module ROC_PLUS_OPCODE_255;
 import spicy;
 import ROC_PLUS_ENUMS;
 import ROC_PLUS_FUNCTIONS;
-import ROC_PLUS_GLOBALS;
+import ROC_PLUS;
 #
 # Opcode 255 - Error Indicator
 #
@@ -13,8 +13,8 @@ type Error = unit() {
 };
 
 type ErrorIndicator = unit(dataLength : uint8) {
-    response : ErrorIndicatorResponse(dataLength) if ( dataLength % 2 == 0 && ROC_PLUS_GLOBALS::PACKET_TYPE_GLOBAL == ROC_PLUS_ENUMS::PacketType::RESPONSE );
-    unknown  : ErrorIndicatorUnknown(dataLength)  if ( dataLength % 2 != 0 || ROC_PLUS_GLOBALS::PACKET_TYPE_GLOBAL != ROC_PLUS_ENUMS::PacketType::RESPONSE );
+    response : ErrorIndicatorResponse(dataLength) if ( dataLength % 2 == 0 && ROC_PLUS::PACKET_TYPE_GLOBAL == ROC_PLUS_ENUMS::PacketType::RESPONSE );
+    unknown  : ErrorIndicatorUnknown(dataLength)  if ( dataLength % 2 != 0 || ROC_PLUS::PACKET_TYPE_GLOBAL != ROC_PLUS_ENUMS::PacketType::RESPONSE );
 };
 
 type ErrorIndicatorUnknown = unit(dataLength: uint8) {

@@ -5,4 +5,7 @@ import spicy;
 
 # Need to make this global due to edge cases where we have to determine the packet type 
 # while in the middle of parsing a message and somehow get that value back up to the top level to be logged
-public global PACKET_TYPE_GLOBAL : ROC_PLUS_ENUMS::PacketType;
+# Initialize to a concrete value to ensure symbol emission across
+# Spicy 1.11 (Zeek 7.0) toolchains where uninitialized globals
+# may not be exported across translation units.
+public global PACKET_TYPE_GLOBAL : ROC_PLUS_ENUMS::PacketType = ROC_PLUS_ENUMS::PacketType::UNKNOWN;

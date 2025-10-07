@@ -3,10 +3,10 @@ module ROC_PLUS_OPCODE_007;
 import spicy;
 import ROC_PLUS_ENUMS;
 import ROC_PLUS_FUNCTIONS;
-import ROC_PLUS_GLOBALS;
+import ROC_PLUS;
 
 type ReadRealtimeClock = unit {
-    switch(ROC_PLUS_GLOBALS::PACKET_TYPE_GLOBAL) {
+    switch(ROC_PLUS::PACKET_TYPE_GLOBAL) {
         ROC_PLUS_ENUMS::PacketType::REQUEST  -> request  : ReadRealtimeClockRequest();
         ROC_PLUS_ENUMS::PacketType::RESPONSE -> response : ReadRealtimeClockResponse();
     };

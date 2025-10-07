@@ -3,15 +3,15 @@ module ROC_PLUS_OPCODE_206;
 import spicy;
 import ROC_PLUS_ENUMS;
 import ROC_PLUS_FUNCTIONS;
-import ROC_PLUS_GLOBALS;
+import ROC_PLUS;
 
 type ReadTransactionHistory = unit(dataLength: uint8) {
     command : uint8 &convert=ROC_PLUS_ENUMS::TransactionHistoryCommand($$);
     on command {
-        ROC_PLUS_GLOBALS::PACKET_TYPE_GLOBAL = ROC_PLUS_FUNCTIONS::determineOpcode206PacketType(dataLength, self.command);
+        ROC_PLUS::PACKET_TYPE_GLOBAL = ROC_PLUS_FUNCTIONS::determineOpcode206PacketType(dataLength, self.command);
     }
 
-    switch(ROC_PLUS_GLOBALS::PACKET_TYPE_GLOBAL) {
+    switch(ROC_PLUS::PACKET_TYPE_GLOBAL) {
         ROC_PLUS_ENUMS::PacketType::REQUEST  -> request  : ReadTransactionHistoryRequest(self.command);
         ROC_PLUS_ENUMS::PacketType::RESPONSE -> response : ReadTransactionHistoryResponse(self.command, dataLength);
         ROC_PLUS_ENUMS::PacketType::UNKNOWN  -> unknown  : ReadTransactionHistoryUnknown(dataLength);

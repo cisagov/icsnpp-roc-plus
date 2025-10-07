@@ -3,11 +3,11 @@ module ROC_PLUS_OPCODE_205;
 import spicy;
 import ROC_PLUS_ENUMS;
 import ROC_PLUS_FUNCTIONS;
-import ROC_PLUS_GLOBALS;
+import ROC_PLUS;
 
 # ROC Plus Protocol Specifications Manual 2-42
 type PeerToPeerNetworkMessages = unit (dataLength: uint8) {
-    switch(ROC_PLUS_GLOBALS::PACKET_TYPE_GLOBAL) {
+    switch(ROC_PLUS::PACKET_TYPE_GLOBAL) {
         ROC_PLUS_ENUMS::PacketType::REQUEST  -> request  : PeerToPeerNetworkMessagesRequest;
         ROC_PLUS_ENUMS::PacketType::RESPONSE -> response : PeerToPeerNetworkMessagesResponse;
         ROC_PLUS_ENUMS::PacketType::UNKNOWN  -> unknown  : PeerToPeerNetworkMessagesUnknown(dataLength);
