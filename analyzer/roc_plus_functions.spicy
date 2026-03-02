@@ -470,5 +470,7 @@ public function dataTypeSize(dataType : ROC_PLUS_ENUMS::ReadTransactionDataType)
         case ROC_PLUS_ENUMS::ReadTransactionDataType::DATA_TYPE_STRING20:   return 20;
         case ROC_PLUS_ENUMS::ReadTransactionDataType::DATA_TYPE_STRING30:   return 30;
         case ROC_PLUS_ENUMS::ReadTransactionDataType::DATA_TYPE_T_STRING40: return 40;
+
+        default: throw "Unknown dataType: %s while determining dataTypeSize" % dataType;
     }
 }
