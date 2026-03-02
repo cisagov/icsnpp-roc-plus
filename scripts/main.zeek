@@ -124,6 +124,13 @@ redef record connection += {
 
 redef likely_server_ports += { roc_plus_ports_tcp, roc_plus_ports_udp };
 
+# Zeek 8.1+ caps vector/set log fields at 100 elements by default.
+# ROC Plus system config legitimately has up to 196 point types (Table 2-2),
+# and other opcodes can also exceed this limit. Disable the cap for this plugin.
+@ifdef ( Log::default_max_field_container_elements )
+    redef Log::default_max_field_container_elements = 0;
+@endif
+
 #Put protocol detection information here
 event zeek_init() &priority=5 {
 
