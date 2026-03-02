@@ -184,4 +184,6 @@ This log captures raw data from unrecognized or unparseable ROC Plus opcodes and
 * See the `ROC_PLUS::roc_plus_unknown_data_log: record` in file `scripts/roc_plus_types.zeek` for a list of the fields logged.
 * This log is used for any opcode that the parser doesn't specifically handle.
 
+### License
 
+Copyright 2025 Battelle Energy Alliance, LLC. Released under the terms of the 3-Clause BSD License (see [`LICENSE`](./LICENSE)).

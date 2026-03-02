@@ -3,14 +3,14 @@ module ROC_PLUS_OPCODE_108;
 import spicy;
 import ROC_PLUS_ENUMS;
 import ROC_PLUS_FUNCTIONS;
-import ROC_PLUS_GLOBALS;
+import ROC_PLUS;
 
 type RequestHistoryTagAndPeriodicIndexHistoricalPoints = unit {
     historicalPoint : uint8 &convert=ROC_PLUS_FUNCTIONS::uintToHexString($$);
 };
 
 type RequestHistoryTagAndPeriodicIndex = unit(dataLength : uint8) {
-    switch(ROC_PLUS_GLOBALS::PACKET_TYPE_GLOBAL) {
+    switch(ROC_PLUS::PACKET_TYPE_GLOBAL) {
         ROC_PLUS_ENUMS::PacketType::REQUEST  -> request  : RequestHistoryTagAndPeriodicIndexRequest();
         ROC_PLUS_ENUMS::PacketType::RESPONSE -> response : RequestHistoryTagAndPeriodicIndexResponse();
         ROC_PLUS_ENUMS::PacketType::UNKNOWN  -> unknown  : RequestHistoryTagAndPeriodicIndexUnknown(dataLength);

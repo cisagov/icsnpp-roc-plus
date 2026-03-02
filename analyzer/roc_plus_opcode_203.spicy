@@ -3,7 +3,7 @@ module ROC_PLUS_OPCODE_203;
 import spicy;
 import ROC_PLUS_ENUMS;
 import ROC_PLUS_FUNCTIONS;
-import ROC_PLUS_GLOBALS;
+import ROC_PLUS;
 
 function removeTrailingEmptyStrings(v: vector<bytes>): vector<bytes> {
     local local_vector : vector<bytes> = v;
@@ -173,10 +173,10 @@ type GeneralFileTransfer = unit(dataLength: uint8) {
     # Need this byte to determine packet type
     command_raw : uint8;
     on command_raw {
-        ROC_PLUS_GLOBALS::PACKET_TYPE_GLOBAL = ROC_PLUS_FUNCTIONS::determineOpcode203PacketType(dataLength, self.command_raw, self.command);
+        ROC_PLUS::PACKET_TYPE_GLOBAL = ROC_PLUS_FUNCTIONS::determineOpcode203PacketType(dataLength, self.command_raw, self.command);
     }
 
-    switch(ROC_PLUS_GLOBALS::PACKET_TYPE_GLOBAL) {
+    switch(ROC_PLUS::PACKET_TYPE_GLOBAL) {
         ROC_PLUS_ENUMS::PacketType::REQUEST  -> request  : GeneralFileTransferRequest(dataLength, self.command);
         ROC_PLUS_ENUMS::PacketType::RESPONSE -> response : GeneralFileTransferResponse(dataLength, self.command);
     };
@@ -204,4 +204,3 @@ type GeneralFileTransferResponse = unit(dataLength: uint8, command: ROC_PLUS_ENU
         *  -> : bytes &size=(dataLength - 1);  # For CLOSE and DELETE, consume remaining data
     };
 };
-

@@ -3,7 +3,7 @@ module ROC_PLUS_OPCODE_181;
 import spicy;
 import ROC_PLUS_ENUMS;
 import ROC_PLUS_FUNCTIONS;
-import ROC_PLUS_GLOBALS;
+import ROC_PLUS;
 type Parameter = unit {
     pointType        : uint8;
     pointLogicNumber : uint8;
@@ -16,7 +16,7 @@ type ParameterWithData = unit(dataLength : uint8) {
 };
 
 type WriteParameters = unit(dataLength : uint8) {
-    switch(ROC_PLUS_GLOBALS::PACKET_TYPE_GLOBAL) {
+    switch(ROC_PLUS::PACKET_TYPE_GLOBAL) {
         ROC_PLUS_ENUMS::PacketType::REQUEST  -> request  : WriteParametersRequest(dataLength);
         ROC_PLUS_ENUMS::PacketType::RESPONSE -> response : WriteParametersResponse();
         ROC_PLUS_ENUMS::PacketType::UNKNOWN  -> unknown  : WriteParametersUnknown(dataLength);

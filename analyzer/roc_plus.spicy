@@ -17,7 +17,9 @@ module ROC_PLUS;
 
 import spicy;
 import ROC_PLUS_ENUMS;
-import ROC_PLUS_GLOBALS;
+## Use a module-level global here to avoid cross-module global
+## issues on older Spicy (Zeek 7.0) JIT toolchains.
+public global PACKET_TYPE_GLOBAL : ROC_PLUS_ENUMS::PacketType = ROC_PLUS_ENUMS::PacketType::UNKNOWN;
 import ROC_PLUS_FUNCTIONS;
 
 import ROC_PLUS_OPCODE_006;
@@ -107,7 +109,7 @@ public type ROC_Message = unit {
 public type DataBytes = unit(rocMessage: ROC_Message) {
     # var opcode     : ROC_PLUS_ENUMS::Opcode;
     var dataLength : uint8;
-    var packetType : ROC_PLUS_ENUMS::PacketType = ROC_PLUS_GLOBALS::PACKET_TYPE_GLOBAL;
+    var packetType : ROC_PLUS_ENUMS::PacketType = ROC_PLUS::PACKET_TYPE_GLOBAL;
 
     switch(rocMessage.opcode) {
         ROC_PLUS_ENUMS::Opcode::SYSTEM_CONFIG                            -> systemConfiguration                  : ROC_PLUS_OPCODE_006::SystemConfiguration();
@@ -149,12 +151,12 @@ public type DataBytes = unit(rocMessage: ROC_Message) {
         if(rocMessage.opcode != ROC_PLUS_ENUMS::Opcode::GENERAL_FILE_TRANSFER && 
            rocMessage.opcode != ROC_PLUS_ENUMS::Opcode::READ_TRANSACTION_HISTORY_DATA &&
            rocMessage.opcode != ROC_PLUS_ENUMS::Opcode::HISTORY_INFORMATION_DATA) {
-            ROC_PLUS_GLOBALS::PACKET_TYPE_GLOBAL = ROC_PLUS_FUNCTIONS::determinePacketType(rocMessage.opcode, rocMessage.dataLength);
+            ROC_PLUS::PACKET_TYPE_GLOBAL = ROC_PLUS_FUNCTIONS::determinePacketType(rocMessage.opcode, rocMessage.dataLength);
         }
     }
 
     on %done {
-        self.packetType = ROC_PLUS_GLOBALS::PACKET_TYPE_GLOBAL;
+        self.packetType = ROC_PLUS::PACKET_TYPE_GLOBAL;
     }
 
     # on %error(msg: string) {
