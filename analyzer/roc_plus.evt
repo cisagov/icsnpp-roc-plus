@@ -1,6 +1,39 @@
 import ROC_PLUS;
 import Zeek_roc_plus;
 
+# Spicy 1.16+ (Zeek 8.2+) requires every module referenced by an exported
+# unit to be imported here, even if this .evt file doesn't use them directly.
+# Without these imports the build fails with
+# "export declaration `ROC_PLUS_OPCODE_NNN::X` does not refer to an ID".
+import ROC_PLUS_OPCODE_006;
+import ROC_PLUS_OPCODE_007;
+import ROC_PLUS_OPCODE_008;
+import ROC_PLUS_OPCODE_010;
+import ROC_PLUS_OPCODE_011;
+import ROC_PLUS_OPCODE_017;
+import ROC_PLUS_OPCODE_024;
+import ROC_PLUS_OPCODE_050;
+import ROC_PLUS_OPCODE_100;
+import ROC_PLUS_OPCODE_105;
+import ROC_PLUS_OPCODE_108;
+import ROC_PLUS_OPCODE_118;
+import ROC_PLUS_OPCODE_119;
+import ROC_PLUS_OPCODE_135;
+import ROC_PLUS_OPCODE_136;
+import ROC_PLUS_OPCODE_137;
+import ROC_PLUS_OPCODE_138;
+import ROC_PLUS_OPCODE_139;
+import ROC_PLUS_OPCODE_166;
+import ROC_PLUS_OPCODE_167;
+import ROC_PLUS_OPCODE_180;
+import ROC_PLUS_OPCODE_181;
+import ROC_PLUS_OPCODE_203;
+import ROC_PLUS_OPCODE_205;
+import ROC_PLUS_OPCODE_206;
+import ROC_PLUS_OPCODE_224;
+import ROC_PLUS_OPCODE_225;
+import ROC_PLUS_OPCODE_255;
+
 protocol analyzer ROC_PLUS_UDP over UDP:
     parse with ROC_PLUS::UDP_Messages;
 
