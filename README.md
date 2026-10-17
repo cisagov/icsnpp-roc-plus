@@ -41,6 +41,41 @@ From here you can install the locally built files through `zkg install ./icsnpp-
 
 Or you can manually run the parser without installing it: `zeek ./build/roc_plus.hlto ./scripts/__load__.zeek  -Cr <pcap>`
 
+## Custom ports
+
+ROC Plus detection is port-based; this package does not provide payload
+signatures. The standard TCP and UDP ports are both 4000. To add port 12345
+through a Zeek site policy, add it to the set for each transport that should be
+parsed:
+
+```zeek
+redef ROC_PLUS::roc_plus_ports_tcp += { 12345/tcp };
+redef ROC_PLUS::roc_plus_ports_udp += { 12345/udp };
+```
+
+`ROC_PLUS::roc_plus_ports_tcp` is registered with the TCP analyzer, and
+`ROC_PLUS::roc_plus_ports_udp` is registered with the UDP analyzer. The package
+also adds both sets to Zeek's `likely_server_ports` direction heuristic during
+initialization. Adding a port only to `likely_server_ports` does not enable ROC
+Plus parsing; the port must also be registered with the appropriate analyzer by
+including it in the corresponding ROC Plus set.
+
+As an alternative, set `ZEEK_ROC_PLUS_PORTS` to a comma-separated list of
+transport-qualified ports before starting Zeek. Each entry is routed to the
+corresponding TCP or UDP analyzer and direction heuristic:
+
+```bash
+ZEEK_ROC_PLUS_PORTS=12345/tcp,12345/udp zeek -Cr traffic.pcap
+```
+
+The environment variable and site policy are read when Zeek initializes, so a
+running standalone process or cluster must be restarted or redeployed after a
+change. Changing the configured ports does not require rebuilding the plugin.
+
+Port registration assigns all traffic using the configured server port directly
+to the ROC Plus analyzer. Configure only ports dedicated to ROC Plus: unrelated
+or malformed traffic on those ports will still be presented to the analyzer and
+may add processing overhead or parser diagnostics before it is rejected.
 
 ## Log Files
 The ROC Plus analyzer generates several log files based on the type of ROC Plus traffic observed. 

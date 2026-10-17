@@ -23,6 +23,9 @@ export {
     const roc_plus_ports_udp: set[port] = { 4000/udp } &redef;
     const roc_plus_ports_tcp: set[port] = { 4000/tcp } &redef;
 
+    # Additional ROC Plus ports supplied through the environment.
+    global roc_plus_ports_str: string = getenv("ZEEK_ROC_PLUS_PORTS");
+
     redef enum Log::ID += { LOG_ROC_PLUS_LOG, 
                             LOG_ROC_PLUS_SYS_CFG_LOG,
                             LOG_ROC_PLUS_HISTORICAL_MIN_MAX_VALS_LOG,
@@ -122,8 +125,6 @@ redef record connection += {
     roc_plus_unknown_data_log: roc_plus_unknown_data_log &optional;
 };
 
-redef likely_server_ports += { roc_plus_ports_tcp, roc_plus_ports_udp };
-
 # Zeek 8.1+ caps vector/set log fields at 100 elements by default.
 # ROC Plus system config legitimately has up to 196 point types (Table 2-2),
 # and other opcodes can also exceed this limit. Disable the cap for this plugin.
@@ -134,6 +135,17 @@ redef likely_server_ports += { roc_plus_ports_tcp, roc_plus_ports_udp };
 #Put protocol detection information here
 event zeek_init() &priority=5 {
 
+    # Populate this at initialization so that site redefinitions of the
+    # transport-specific port sets are included in Zeek's direction heuristic.
+    # This heuristic is separate from assigning the analyzers below.
+    for (configured_udp_port in roc_plus_ports_udp) {
+        add likely_server_ports[configured_udp_port];
+        }
+
+    for (configured_tcp_port in roc_plus_ports_tcp) {
+        add likely_server_ports[configured_tcp_port];
+        }
+
     # register with the file analysis framework
     Files::register_protocol(Analyzer::ANALYZER_ROC_PLUS_UDP,
                             [$get_file_handle = ROC_PLUS::get_file_handle]);
@@ -142,6 +154,35 @@ event zeek_init() &priority=5 {
 
     Analyzer::register_for_ports(Analyzer::ANALYZER_ROC_PLUS_UDP, roc_plus_ports_udp);
     Analyzer::register_for_ports(Analyzer::ANALYZER_ROC_PLUS_TCP, roc_plus_ports_tcp);
+
+    # Additional ROC Plus ports.
+    if (roc_plus_ports_str != "") {
+        local roc_plus_ports = split_string(roc_plus_ports_str, /,/);
+        local roc_plus_ports_tcp_custom: set[port] = {};
+        local roc_plus_ports_udp_custom: set[port] = {};
+
+        for (roc_plus_port_idx in roc_plus_ports) {
+            local roc_plus_port = to_port(roc_plus_ports[roc_plus_port_idx]);
+            local roc_plus_prot = get_port_transport_proto(roc_plus_port);
+            if (roc_plus_prot == tcp) {
+                add roc_plus_ports_tcp_custom[roc_plus_port];
+                add likely_server_ports[roc_plus_port];
+                }
+
+            else if (roc_plus_prot == udp) {
+                add roc_plus_ports_udp_custom[roc_plus_port];
+                add likely_server_ports[roc_plus_port];
+                }
+            }
+
+        if (|roc_plus_ports_tcp_custom| > 0) {
+            Analyzer::register_for_ports(Analyzer::ANALYZER_ROC_PLUS_TCP, roc_plus_ports_tcp_custom);
+            }
+
+        if (|roc_plus_ports_udp_custom| > 0) {
+            Analyzer::register_for_ports(Analyzer::ANALYZER_ROC_PLUS_UDP, roc_plus_ports_udp_custom);
+            }
+        }
 
     # initialize logging streams for all ROC_PLUS logs
     Log::create_stream(ROC_PLUS::LOG_ROC_PLUS_LOG,
